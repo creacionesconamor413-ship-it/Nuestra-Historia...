@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para mi persona favorita</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --rosa-fuerte: #ff007f;
+            --rosa-suave: #ffdde1;
+        }
+
+        body {
+            background: radial-gradient(circle, #fff5f7 0%, #ffdde1 100%);
+            height: 100vh;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: background 1s ease;
+        }
+
+        /* Tarjeta Inicial */
+        .romance-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 105, 180, 0.2);
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            z-index: 10;
+            animation: bounceIn 1s;
+        }
+
+        h1, h2, .poema-titulo {
+            font-family: 'Dancing Script', cursive;
+            color: var(--rosa-fuerte);
+        }
+
+        .btn-love {
+            background: linear-gradient(45deg, #ff4081, #d81b60);
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .btn-love:hover { transform: scale(1.1); }
+
+        /* Pantalla de Poema (Segunda Pantalla) */
+        #pantalla-poema {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #fff 0%, #ffe4e8 100%);
+            display: none; /* Se activa con JS */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+
+        .contenedor-poema {
+            max-width: 600px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .verso {
+            font-size: 1.4rem;
+            color: #4a148c;
+            margin: 10px 0;
+            font-family: 'Dancing Script', cursive;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 1s forwards;
+        }
+
+        /* Animaciones */
+        @keyframes bounceIn {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .corazon-volador {
+            position: absolute;
+            color: #ff4081;
+            pointer-events: none;
+            z-index: 150;
+            animation: subir linear forwards;
+        }
+
+        @keyframes subir {
+            to { transform: translateY(-110vh) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="pantalla1" class="romance-card">
+        <div style="font-size: 3rem;">💝</div>
+        <h1>Antes de entrar...</h1>
+        <input type="text" id="nombreInput" class="form-control rounded-pill text-center mt-3" placeholder="Escribe tu nombre aquí">
+        <button class="btn-love mt-4" onclick="irAPregunta()">Continuar</button>
+    </div>
+
+    <div id="pantalla2" class="romance-card" style="display: none;">
+        <h2>Para ti, <span id="spanNombre"></span></h2>
+        <p class="fs-4 mt-3" style="font-family: 'Dancing Script';">"¿Puedo ser la persona que te haga feliz todos los días?"</p>
+        <div class="d-flex justify-content-center gap-3 mt-4">
+            <button class="btn-love" onclick="mostrarPoema()">Sí, acepto ❤️</button>
+            <button id="btnNo" class="btn btn-outline-secondary rounded-pill" onmouseover="moverBoton()">No</button>
+        </div>
+    </div>
+
+    <div id="pantalla-poema">
+        <div class="contenedor-poema">
+            <h1 class="poema-titulo mb-4">Mi Promesa para Ti</h1>
+            <div class="verso" style="animation-delay: 0.5s;">Desde que te vi, mi mundo cambió,</div>
+            <div class="verso" style="animation-delay: 1.5s;">tu risa es la música que mi alma buscó.</div>
+            <div class="verso" style="animation-delay: 2.5s;">No solo quiero ser un momento en tu vida,</div>
+            <div class="verso" style="animation-delay: 3.5s;">quiero ser tu refugio, tu paz y tu salida.</div>
+            <div class="verso" style="animation-delay: 4.5s;">Te prometo besos, ternura y verdad,</div>
+            <div class="verso" style="animation-delay: 5.5s;">hacerte feliz por toda la eternidad.</div>
+            <div class="verso" style="animation-delay: 6.5s; font-size: 2rem; font-weight: bold;">¡Te quiero! ❤️</div>
+        </div>
+    </div>
+
+    <script>
+        let nombreUsuario = "";
+
+        function irAPregunta() {
+            nombreUsuario = document.getElementById('nombreInput').value;
+            if(!nombreUsuario) return alert("Por favor, pon tu nombre ❤️");
+            
+            document.getElementById('pantalla1').style.display = 'none';
+            document.getElementById('pantalla2').style.display = 'block';
+            document.getElementById('spanNombre').innerText = nombreUsuario;
+        }
+
+        function moverBoton() {
+            const btn = document.getElementById('btnNo');
+            btn.style.position = 'absolute';
+            btn.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+            btn.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+        }
+
+        function mostrarPoema() {
+            // Desvanecer la tarjeta actual
+            document.getElementById('pantalla2').style.opacity = '0';
+            
+            setTimeout(() => {
+                document.getElementById('pantalla2').style.display = 'none';
+                const poema = document.getElementById('pantalla-poema');
+                poema.style.display = 'flex';
+                
+                // Efecto de aparición suave de la nueva pantalla
+                setTimeout(() => { poema.style.opacity = '1'; }, 100);
+                
+                // Iniciar lluvia de corazones
+                setInterval(crearCorazon, 200);
+            }, 500);
+        }
+
+        function crearCorazon() {
+            const c = document.createElement('div');
+            c.innerHTML = '❤️';
+            c.className = 'corazon-volador';
+            c.style.left = Math.random() * 100 + 'vw';
+            c.style.bottom = '-10vh';
+            c.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            c.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            c.style.opacity = Math.random();
+            document.body.appendChild(c);
+            setTimeout(() => c.remove(), 4000);
+        }
+    </script>
+</body>
+</html>
